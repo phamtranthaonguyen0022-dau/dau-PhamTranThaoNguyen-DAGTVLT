@@ -1,0 +1,32 @@
+import java.util.*;
+
+class Solution {
+    public int[] findMode(TreeNode root) {
+        Map<Integer, Integer> freq = new HashMap<>();
+        
+        dfs(root, freq);
+        
+        int maxFreq = 0;
+        for (int val : freq.values()) {
+            maxFreq = Math.max(maxFreq, val);
+        }
+        
+        List<Integer> res = new ArrayList<>();
+        for (int key : freq.keySet()) {
+            if (freq.get(key) == maxFreq) {
+                res.add(key);
+            }
+        }
+        
+        return res.stream().mapToInt(i -> i).toArray();
+    }
+    
+    private void dfs(TreeNode node, Map<Integer, Integer> freq) {
+        if (node == null) return;
+        
+        freq.put(node.val, freq.getOrDefault(node.val, 0) + 1);
+        
+        dfs(node.left, freq);
+        dfs(node.right, freq);
+    }
+}
